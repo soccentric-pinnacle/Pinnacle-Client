@@ -10,7 +10,7 @@ Pinnacle-Client is the C++17 embedded-Linux validation daemon. It builds a nativ
 - A checkout layout with `Pinnacle-Client` beside `Pinnacle-HAL`; the Docker mount expects the parent `Pinnacle/` directory.
 - For Docker targets: Docker with an ARM64-capable runtime/QEMU. `make docker-install` may use `sudo apt` when Docker is absent.
 - For formatting/static analysis/docs: `clang-format`, `cmake-format`, `cppcheck`, `doxygen`, and `graphviz` as applicable.
-- For deployment: `sshpass`, SSH/SCP access to the target, and a reachable target at `IP_A` or `IP_B`. The Makefile defaults to user `nvidia` and those two addresses; these are placeholders, not credentials to reuse in production.
+- For deployment: `sshpass`, SSH/SCP access to the target, and a reachable target at `IP_A` or `IP_B`. The Makefile defaults to user `root` (key-based SSH, no password) and those two addresses; these are placeholders, not credentials to reuse in production.
 
 ## 2. Setup
 
@@ -83,8 +83,8 @@ make deploy
 Deploy one device:
 
 ```bash
-make deploy-a IP_A=192.168.1.3 USER=nvidia PASS='<target-password>'
-make deploy-b IP_B=192.168.1.13 USER=nvidia PASS='<target-password>'
+make deploy-a IP_A=192.168.1.3 HAL_SSH_USER=root HAL_SSH_PASS='<target-password>'
+make deploy-b IP_B=192.168.1.13 HAL_SSH_USER=root HAL_SSH_PASS='<target-password>'
 ```
 
 These targets first run `docker-build`, remove `/tmp/acu-test` remotely, and copy `build/cross/lib` and `build/cross/bin` there. Do not put real passwords in shell history or source; use an appropriate secret mechanism and verify the Makefile's `sshpass` behavior before production use.
